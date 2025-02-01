@@ -3,30 +3,29 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/global-store.jsx";
-function Signup() {
+
+function Login() {
   const [formData, setFormData] = useState({
-    fullname: "",
     username: "",
-    email: "",
     password: "",
   });
-  
+
   const navigate = useNavigate();
   const setAuthUser = useAuthStore((state) => state.setAuthUser);
 
   const { mutate, isError, isPending, error } = useMutation({
-    mutationFn: async ({ email, username, fullname, password }) => {
+    mutationFn: async ({ username, password }) => {
       try {
-        const res = await fetch("/api/auth/signup", {
+        const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, username, fullname, password }),
+          body: JSON.stringify({ username, password }),
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to create account");
+        if (!res.ok) throw new Error(data.error || "Failed to log in");
         return data;
       } catch (error) {
         console.error(error);
@@ -34,12 +33,10 @@ function Signup() {
       }
     },
     onSuccess: (data) => {
-      console.log('API Response Data:', data); // Check the data received
-      toast.success("Account created successfully");
-      setAuthUser(data); // Update the global state
-      //localStorage.setItem("authUser", JSON.stringify(data)); // Store the whole response in localStorage
-      navigate("/Rolechoose"); // Redirect to the admin page
-    },    
+      toast.success("Logged in successfully");
+      setAuthUser(data);
+      navigate("/Rolechoose");
+    },
   });
 
   const handleInputChange = (e) => {
@@ -48,37 +45,23 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate(formData); // Trigger the mutation
+    mutate(formData);
   };
 
-  const handleLogin = () => {
-    navigate("/Login");
+  const handleSignup = () => {
+    navigate("/signup");
   };
 
   return (
     <div className="container">
-      <h1>Sign Up</h1>
+      <h1>Login</h1>
       <div className="card">
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="fullname"
-            placeholder="Full Name"
-            value={formData.fullname}
-            onChange={handleInputChange}
-          />
           <input
             type="text"
             name="username"
             placeholder="Username"
             value={formData.username}
-            onChange={handleInputChange}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
             onChange={handleInputChange}
           />
           <input
@@ -89,14 +72,14 @@ function Signup() {
             onChange={handleInputChange}
           />
           <button type="submit" disabled={isPending}>
-            {isPending ? "Signing Up..." : "Sign Up"}
+            {isPending ? "Logging In..." : "Login"}
           </button>
         </form>
         {isError && <p className="error">{error.message}</p>}
-        <div className="login-prompt">
+        <div className="signup-prompt">
           <p>
-            Already have an account?{" "}
-            <button onClick={handleLogin}>Login</button>
+            Dont have an account? {" "}
+            <button onClick={handleSignup}>Sign Up</button>
           </p>
         </div>
       </div>
@@ -104,4 +87,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Login;
