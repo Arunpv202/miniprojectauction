@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation} from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useAuthStore } from "../store/global-store.jsx";
 
 function Login() {
@@ -12,6 +11,7 @@ function Login() {
 
   const navigate = useNavigate();
   const setAuthUser = useAuthStore((state) => state.setAuthUser);
+  const refetch = useAuthStore((state) => state.refetch);
 
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ username, password }) => {
@@ -32,9 +32,10 @@ function Login() {
         throw error;
       }
     },
-    onSuccess: (data) => {
-      toast.success("Logged in successfully");
+    onSuccess: async (data) => {
+    
       setAuthUser(data);
+      await refetch();
       navigate("/Rolechoose");
     },
   });

@@ -4,5 +4,7 @@ export const useAuthStore = create((set) => ({
   authUser: null,
   setAuthUser: (user) => set({ authUser: user }),
   logout: () => set({ authUser: null }),
+  refetch: null, // To store refetch function
+  setRefetch: (refetchFn) => set({ refetch: refetchFn }),
 }));
 

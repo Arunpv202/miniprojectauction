@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useAuthStore } from "../store/global-store.jsx";
 function Signup() {
   const [formData, setFormData] = useState({
@@ -13,6 +12,7 @@ function Signup() {
   
   const navigate = useNavigate();
   const setAuthUser = useAuthStore((state) => state.setAuthUser);
+  const refetch = useAuthStore((state) => state.refetch);
 
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ email, username, fullname, password }) => {
@@ -33,11 +33,10 @@ function Signup() {
         throw error;
       }
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log('API Response Data:', data); // Check the data received
-      toast.success("Account created successfully");
       setAuthUser(data); // Update the global state
-      //localStorage.setItem("authUser", JSON.stringify(data)); // Store the whole response in localStorage
+      await refetch(); // Invalidate the authUser query
       navigate("/Rolechoose"); // Redirect to the admin page
     },    
   });
