@@ -1,6 +1,5 @@
 import User from "../models/usermodel.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"; 
 import { Sequelize } from "sequelize";
 import { sequelize } from "../db/db.js";
 import { generateTokenAndSetCookie } from "../lib/generatetokens.js";

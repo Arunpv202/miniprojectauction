@@ -33,7 +33,7 @@ function Login() {
       }
     },
     onSuccess: async (data) => {
-    
+      console.log(data);
       setAuthUser(data);
       await refetch();
       navigate("/Rolechoose");

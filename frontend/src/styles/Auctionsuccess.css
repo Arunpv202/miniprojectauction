@@ -1,0 +1,87 @@
+.auction-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+/* Dropdown Button */
+.dropdown-container {
+  position: absolute;
+  top: 20px;
+}
+
+.dropdown-btn {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #d62121;
+  border-radius: 5px;
+  background: rgb(203, 14, 14);
+  cursor: pointer;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 250px; /* Increased width */
+  max-height: 300px; /* Increased height */
+  overflow-y: auto; /* Enables scrolling if needed */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px; /* More padding for better spacing */
+  font-size: 16px; /* Increased text size */
+  border-radius: 8px;
+}
+
+/* Ensure list items have better spacing */
+.dropdown-content p {
+  margin: 8px 0;
+  padding: 10px;
+  font-size: 16px; /* Increased text size */
+  cursor: default;
+  border-bottom: 1px solid #ddd; /* Optional: Adds a separator */
+}
+
+/* Ensure larger dropdowns remain visible when toggled */
+.expanded-list {
+  display: block !important;
+}
+
+/* Left Dropdown (Teams) */
+.team-dropdown {
+  left: 20px;
+}
+
+/* Right Dropdown (Players) */
+.player-dropdown {
+  right: 20px;
+}
+
+/* Centered Start Auction Button */
+.start-auction-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.start-auction-btn {
+  background-color: #007bff;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 80%; /* Makes it round */
+  width: 200px; /* Controls size */
+  height: 200px; /* Controls size */
+  text-align: center;
+}
+
+.start-auction-btn:hover {
+  background-color: #0056b3;
+}

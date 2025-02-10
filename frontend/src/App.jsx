@@ -3,6 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import Signup from "./components/Signup.jsx";
 import Rolechoose from "./components/Rolechoose.jsx";
 import Login from "./components/Login.jsx";
+import Admin from "./components/Admin.jsx";
+import AuctionDetails from "./components/Adminpage2.jsx";
+import StartAuction from "./components/Admin3.jsx";
 import "./styles.css";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import { useAuthStore } from "./store/global-store.jsx"; // Assuming this is the correct import path
@@ -53,6 +56,15 @@ function App() {
         path="/Rolechoose"
         element={authUser ? <Rolechoose /> : <Navigate to="/Login" />}
       />
+      <Route
+        path="/Admin"
+        element={authUser ? <Admin />: <Navigate to="/Login" />}
+        />
+      <Route
+        path="/Adminpage2"
+        element={authUser ? <AuctionDetails/>: <Navigate to="/Login" />}
+        />
+      <Route path="/admin3" element={authUser ? <StartAuction/>: <Navigate to="/Login" />} />
       <Route path="/Login" element={<Login />} />
     </Routes>
   );

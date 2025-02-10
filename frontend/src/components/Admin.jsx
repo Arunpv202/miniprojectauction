@@ -1,0 +1,120 @@
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/global-store.jsx";
+import "../styles/Adminstyle.css";
+
+function Admin() {
+      const [formData, setFormData] = useState({
+    name: "",
+    code: "",
+    teamCount: "",
+      });
+  const logout = useAuthStore((state) => state.logout);
+  const setAuctionCode = useAuthStore((state) => state.setAuctionCode);
+  const navigate = useNavigate();
+
+  // Mutation for logout
+  const { mutate: logoutMutate } = useMutation({
+    mutationFn: async () => {
+      try {
+        const res = await fetch("/api/auth/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to log out");
+        return data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      logout();
+      navigate("/login");
+    },
+  });
+
+  // Mutation for creating an auction
+  const { mutate: createAuctionMutate } = useMutation({
+    mutationFn: async ({ name, code, teamCount }) => {
+      try {
+        const res = await fetch("/api/auction/Auctiondetails", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ name, code, teamCount }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to create auction");
+        return data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+    onSuccess: (data) => {
+      alert("Auction created successfully!");
+      console.log(data);
+      console.log(data.auction.code);
+      setAuctionCode(data.auction.code);
+      navigate("/Adminpage2");
+      
+      //console.log("Auction created:", data.auction);
+    },
+    onError: (error) => {
+      alert(error.message || "Failed to create auction");
+    },
+  });
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    createAuctionMutate(formData);
+  };
+
+  return (
+    <div className="container">
+      <h1>Admin Panel</h1>
+      <form onSubmit={handleSubmit}>
+        <input type="text"
+         name="name"
+          placeholder="Enter Auction Name" 
+          value={formData.name}
+          onChange={handleInputChange}
+          required />
+        <input
+          type="text"
+          name="code"
+          placeholder="Enter Auction Code (6 letters)"
+          value={formData.code}
+        onChange={handleInputChange}
+          required
+        />
+        <input
+          type="number"
+          name="teamCount"
+          placeholder="Enter Number of Teams"
+          value={formData.teamCount}
+          onChange={handleInputChange}
+          required
+        />
+        <button type="submit">Submit</button>
+      </form>
+      <button className="logout" onClick={logoutMutate}>
+        Logout
+      </button>
+    </div>
+  );
+}
+
+export default Admin;

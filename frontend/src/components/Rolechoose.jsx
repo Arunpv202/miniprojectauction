@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/global-store.jsx";
 import "../styles/rolechoose.css";
 function RoleSelection() {
   const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
   const { mutate } = useMutation({
     mutationFn: async () => {
       try {
@@ -22,18 +23,17 @@ function RoleSelection() {
     },
     onSuccess: () => {
       logout();
-      Navigate("/login");
+      navigate("/login");
     },
   });
   
   return (
     <div className="container">
       <h1>Select Role</h1>
-      <button>Admin</button>
+      <button onClick={() => navigate("/Admin")}>Admin</button>
       <button>User</button>
       <button className="logout" onClick={mutate}>Logout</button>
     </div>
   );
 }
-
 export default RoleSelection;
