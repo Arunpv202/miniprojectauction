@@ -23,10 +23,7 @@ const Team = sequelize.define("Team", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  bidincrement: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+  
 },{
     timestamps: true,
 });

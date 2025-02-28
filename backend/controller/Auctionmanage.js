@@ -26,7 +26,7 @@ export const createAuction = async (req, res) => {
 
     // Insert new auction if code is unique
     const auction = await sequelize.query(
-      "INSERT INTO Auctions (name, code, teamCount, createdAt, updatedAt) VALUES (?, ?, ?, NOW(), NOW())",
+      "INSERT INTO Auctions (name, code, teamCount,createdAt, updatedAt) VALUES (?, ?, ?,NOW(), NOW())",
       {
         replacements: [name, code, teamCount],
         type: sequelize.QueryTypes.INSERT,
@@ -47,7 +47,6 @@ export const createAuction = async (req, res) => {
 export const playerdetails = async (req, res) => {
   try {
     const { name, basePrice,auctionCode} = req.body;
-    console.log(auctionCode);
     if (!name || !basePrice) {
       return res.status(400).json({ error: "Player name and base price are required" });
     }
@@ -67,8 +66,17 @@ export const teamDetails = async (req, res) => {
   try {
     const { allocatedPurse,bidincrement,auctionCode} = req.body;
     console.log(allocatedPurse,bidincrement);
+    if(bidincrement<1){
+      return res.status(400).json({ error: "Insufficient Bidding Poi Chaav" });
+    }
 
-    console.log(auctionCode);
+    await sequelize.query(
+      "Update Auctions set bidincrement=? where code=?",
+      {
+        replacements: [bidincrement,auctionCode],
+        type: sequelize.QueryTypes.UPDATE,
+      }
+    );
     const numberOfTeams = await sequelize.query("SELECT teamCount FROM Auctions WHERE code = ? LIMIT 1",
       {
         replacements: [auctionCode],
@@ -84,8 +92,7 @@ export const teamDetails = async (req, res) => {
       const team = await Team.create({
         teamName: null, // Teams start with null name
         allocatedPurse,
-        remainingPurse: allocatedPurse,
-        bidincrement, // Initially, the remaining purse is the same as allocated
+        remainingPurse: allocatedPurse, // Initially, the remaining purse is the same as allocated
         auctionCode,
       });
       // Fetch the newly created team with its data

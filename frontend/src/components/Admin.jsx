@@ -5,11 +5,12 @@ import { useAuthStore } from "../store/global-store.jsx";
 import "../styles/Adminstyle.css";
 
 function Admin() {
-      const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     code: "",
     teamCount: "",
-      });
+  });
+
   const logout = useAuthStore((state) => state.logout);
   const setAuctionCode = useAuthStore((state) => state.setAuctionCode);
   const navigate = useNavigate();
@@ -60,25 +61,29 @@ function Admin() {
     },
     onSuccess: (data) => {
       alert("Auction created successfully!");
-      console.log(data);
-      console.log(data.auction.code);
       setAuctionCode(data.auction.code);
       navigate("/Adminpage2");
-      
-      //console.log("Auction created:", data.auction);
     },
     onError: (error) => {
       alert(error.message || "Failed to create auction");
     },
   });
+
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "teamCount") {
+      if (value === "" || (/^\d*$/.test(value) && Number(value) >= 1)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
     createAuctionMutate(formData);
   };
 
@@ -86,18 +91,20 @@ function Admin() {
     <div className="container">
       <h1>Admin Panel</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text"
-         name="name"
-          placeholder="Enter Auction Name" 
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter Auction Name"
           value={formData.name}
           onChange={handleInputChange}
-          required />
+          required
+        />
         <input
           type="text"
           name="code"
           placeholder="Enter Auction Code (6 letters)"
           value={formData.code}
-        onChange={handleInputChange}
+          onChange={handleInputChange}
           required
         />
         <input

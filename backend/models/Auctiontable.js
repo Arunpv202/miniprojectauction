@@ -25,10 +25,14 @@ const Auction = sequelize.define("Auction", {
       min: 1, // Ensures at least 1 team
     },
   },
+  bidincrement: {
+    type: DataTypes.INTEGER,
+    default:null,
+  },
 },{
   timestamp: true,
 });
-Auction.sync({ force: true }) // Set `force: true` to drop and recreate the table (use with caution)
+Auction.sync({ force:true}) // Set `force: true` to drop and recreate the table (use with caution)
   .then(() => {
     console.log("Auction table created or already exists.");
   })
