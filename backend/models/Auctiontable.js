@@ -7,6 +7,10 @@ const Auction = sequelize.define("Auction", {
     primaryKey: true,
     autoIncrement: true,  // This makes the id auto-increment
   },
+  socketid: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,

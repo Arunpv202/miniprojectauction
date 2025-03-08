@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "../store/global-store.jsx";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState} from "react";
 import "../styles/Admin2.css";
 
 function AuctionDetails() {
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
-  const auctionCode=useAuthStore((state)=>state.auctionCode);
-  console.log(auctionCode);
+  let auctionCode = useAuthStore((state) => state.auctionCode);
+
   const [playerName, setPlayerName] = useState("");
   const [basePrice, setBasePrice] = useState("");
   const [allocatedPurse, setAllocatedPurse] = useState("");
@@ -39,7 +39,7 @@ function AuctionDetails() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ allocatedPurse, bidincrement: bidIncrement ,auctionCode}),
+        body: JSON.stringify({ allocatedPurse, bidincrement: bidIncrement, auctionCode }),
       });
       if (!res.ok) throw new Error("Failed to submit auction");
       return res.json();
@@ -47,7 +47,7 @@ function AuctionDetails() {
     onSuccess: () => {
       setAllocatedPurse("");
       setBidIncrement("");
-      navigate("/admin3")
+      navigate("/admin3");
     },
   });
 
@@ -69,7 +69,6 @@ function AuctionDetails() {
 
   return (
     <div className="container">
-      <h1>Auction Details</h1>
       <input
         type="text"
         placeholder="Player Name"

@@ -26,7 +26,7 @@ export const createAuction = async (req, res) => {
 
     // Insert new auction if code is unique
     const auction = await sequelize.query(
-      "INSERT INTO Auctions (name, code, teamCount,createdAt, updatedAt) VALUES (?, ?, ?,NOW(), NOW())",
+      "INSERT INTO Auctions (socketid,name, code, teamCount,createdAt, updatedAt) VALUES (null,?, ?, ?,NOW(), NOW())",
       {
         replacements: [name, code, teamCount],
         type: sequelize.QueryTypes.INSERT,
@@ -125,3 +125,104 @@ export const getPlayersByAuction = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+export const updateTeamName = async (req, res) => {
+  try {
+    const { teamName, auctionCode, AuctionName } = req.body;
+    console.log(teamName, auctionCode, AuctionName);
+
+    if (!teamName || !auctionCode) {
+      return res.status(400).json({ error: "Team name and auction code are required" });
+    }
+
+    // Check if the auction exists
+    const existingAuction = await sequelize.query(
+      "SELECT id FROM Auctions WHERE code = ? LIMIT 1",
+      {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (existingAuction.length === 0) {
+      return res.status(404).json({ error: "Auction not found" });
+    }
+
+    // Check if the team name already exists in the auction
+    const existingTeam = await sequelize.query(
+      "SELECT teamName FROM Teams WHERE auctionCode = ? AND teamName = ? LIMIT 1",
+      {
+        replacements: [auctionCode, teamName],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (existingTeam.length > 0) {
+      return res.status(400).json({ error: "Team name already exists" });
+    }
+
+    // Check if there are available slots for teams
+    const availableTeam = await sequelize.query(
+      "SELECT teamName FROM Teams WHERE auctionCode = ? AND teamName IS NULL LIMIT 1",
+      {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (availableTeam.length === 0) {
+      return res.status(400).json({ error: "Wait for the admin to start" });
+    }
+
+    // Update the first available team
+    const result = await sequelize.query(
+      "UPDATE Teams SET teamName = ? WHERE auctionCode = ? AND teamName IS NULL LIMIT 1",
+      {
+        replacements: [teamName, auctionCode],
+        type: sequelize.QueryTypes.UPDATE,
+      }
+    );
+    console.log(result);
+
+    res.status(200).json({ message: "Team name updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const fetchsquad = async (req, res) => {
+  try {
+    const { team,auctionCode } = req.params;
+    console.log(team,auctionCode);
+    const squad = await sequelize.query(
+      "SELECT name FROM Players WHERE teamPurchased = ? AND auctionCode = ?",
+      {
+        replacements: [team,auctionCode],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    console.log(squad);
+    res.status(200).json(squad);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+export const fetchRemainingPurse = async (req, res) => {
+  try {
+    const { team, auctionCode } = req.params;
+    console.log(team,auctionCode);
+    const remainingPurse = await sequelize.query(
+      "SELECT remainingPurse FROM Teams WHERE teamName = ? AND auctionCode = ?",
+      {
+        replacements: [team, auctionCode],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    console.log(remainingPurse);
+    res.status(200).json(remainingPurse[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+}

@@ -1,14 +1,29 @@
 import "../styles/Auctionsuccess.css";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useAuthStore } from "../store/global-store.jsx";
 import { useMutation } from "@tanstack/react-query";
+import socket from "../store/socketglobal.jsx"
+import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./common/LoadingSpinner"; // Adjust path if needed
 
 function StartAuction() {
+  const Navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [players, setPlayers] = useState([]);
   const [showPlayers, setShowPlayers] = useState(false);
   const auctionCode = useAuthStore((state) => state.auctionCode);
+  useEffect(() => {
+    socket.on("updateTeams", ({ teams }) => {
+      console.log("Received updated teams:", teams);
+      setTeams(teams); // Update the state with received teams
+    });
+  
+    return () => {
+      socket.off("updateTeams");
+    };
+  }, []);
+
+
 
   const fetchPlayers = async () => {
     const res = await fetch(`/api/auction/fetchPlayers/${auctionCode}`, {
@@ -45,7 +60,7 @@ function StartAuction() {
         <button className="dropdown-btn">Teams</button>
         <div className="dropdown-content expanded-list">
           {teams.length === 0 ? <p>No Teams Available</p> : 
-            teams.map((team, index) => <p key={index}>{team}</p>)}
+            teams.map((team, index) => <p key={index}>{team.teamName}</p>)}
         </div>
       </div>
 
@@ -76,7 +91,7 @@ function StartAuction() {
 
       {/* Start Round Button - Centered */}
       <div className="start-auction-wrapper">
-        <button className="start-auction-btn">Start Round</button>
+        <button className="start-auction-btn" onClick={()=>{Navigate("/Adminpanel")}}>Start Round</button>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const User = sequelize.define("User", {
 }, {
 	timestamps: true,
 });
-User.sync({ force: true }) // Set `force: true` to drop and recreate the table (use with caution)
+User.sync({ force: false }) // Set `force: true` to drop and recreate the table (use with caution)
   .then(() => {
     console.log("Users table created or already exists.");
   })

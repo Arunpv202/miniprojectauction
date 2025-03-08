@@ -1,0 +1,101 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+.dropdown-containerul {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.dropdown-btnul {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dropdown-contentul {
+  margin-top: 5px;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdown-contentul p {
+  margin: 0;
+  padding: 5px;
+}
+.remaining-purse {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Container for boxes and Bid button */
+.section-containerul {
+  position: absolute;
+  top: 10px;
+  left:400px;
+  width: 500px;
+  height: 350px;
+  margin: 200px auto 0; /* Centers the container horizontally */
+  border: 1px dashed #ccc; /* Optional: visual guide */
+}
+
+/* Timer styling */
+.timer {
+  position: absolute;
+  top: 1px; /* Adjust to set the gap between timer and Box 1 */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+}
+
+/* Common styling for data boxes */
+.data-boxul {
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+
+/* Manual positioning for each box inside the container */
+#box1 {
+  top: 66px;
+  left: calc(50% - 75px); /* Centers Box 1 horizontally */
+}
+
+#box2 {
+  top: 170px;
+  left: 60px;
+}
+
+#box3 {
+  top: 170px;
+  right: 60px;
+}
+
+/* Bid button styling inside the container */
+.bid-buttonul {
+  position: absolute;
+  top: 300px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+

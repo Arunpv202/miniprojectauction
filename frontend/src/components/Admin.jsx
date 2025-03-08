@@ -2,8 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/global-store.jsx";
+import socket from "../store/socketglobal.jsx";
 import "../styles/Adminstyle.css";
-
 function Admin() {
   const [formData, setFormData] = useState({
     name: "",
@@ -14,6 +14,7 @@ function Admin() {
   const logout = useAuthStore((state) => state.logout);
   const setAuctionCode = useAuthStore((state) => state.setAuctionCode);
   const navigate = useNavigate();
+  const setSocketid = useAuthStore((state) => state.setSocketid);
 
   // Mutation for logout
   const { mutate: logoutMutate } = useMutation({
@@ -62,8 +63,15 @@ function Admin() {
     onSuccess: (data) => {
       alert("Auction created successfully!");
       setAuctionCode(data.auction.code);
+      socket.connect();
+      socket.emit("createAuction", { auctionCode: data.auction.code });
+      socket.on("connect", () => {
+        console.log("socket connected", socket.id);
+      })
+      setSocketid(data.auction.socketid);
       navigate("/Adminpage2");
     },
+    
     onError: (error) => {
       alert(error.message || "Failed to create auction");
     },
@@ -123,5 +131,4 @@ function Admin() {
     </div>
   );
 }
-
 export default Admin;

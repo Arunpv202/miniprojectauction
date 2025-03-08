@@ -6,6 +6,9 @@ import Login from "./components/Login.jsx";
 import Admin from "./components/Admin.jsx";
 import AuctionDetails from "./components/Adminpage2.jsx";
 import StartAuction from "./components/Admin3.jsx";
+import JoinAuctionForm from "./components/userselection.jsx";
+import SuccessPage from "./components/Lpageuser.jsx";
+import Adminlast from "./components/Adminpanel.jsx";
 import "./styles.css";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import { useAuthStore } from "./store/global-store.jsx"; // Assuming this is the correct import path
@@ -63,6 +66,18 @@ function App() {
       <Route
         path="/Adminpage2"
         element={authUser ? <AuctionDetails/>: <Navigate to="/Login" />}
+        />
+        <Route
+        path="/users"
+        element={authUser ? <JoinAuctionForm/>: <Navigate to="/Login" />}
+        />
+        <Route
+        path="/finalpage"
+        element={authUser ? <SuccessPage/>: <Navigate to="/Login" />}
+        />
+        <Route
+        path="/Adminpanel"
+        element={authUser ? <Adminlast/>: <Navigate to="/Login" />}
         />
       <Route path="/admin3" element={authUser ? <StartAuction/>: <Navigate to="/Login" />} />
       <Route path="/Login" element={<Login />} />

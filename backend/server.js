@@ -1,13 +1,13 @@
-import express from "express"
+import express from "express";
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import authroutes from "./routes/authroute.js"
 import Auctiondetails from "./routes/Auctiondetails.js"
 import { connectMySQL } from "./db/db.js";
+import {app,server} from "./lib/socket.js"
 dotenv.config();
 console.log(process.env.PORT)
-const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(cors());
@@ -15,9 +15,9 @@ app.use(cookieParser());
 app.use("/api/auth", authroutes);
 app.use("/api/auction", Auctiondetails);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8055;
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log(`server running on port  ${PORT}`)
     connectMySQL();
 })

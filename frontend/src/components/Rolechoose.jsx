@@ -31,7 +31,7 @@ function RoleSelection() {
     <div className="container">
       <h1>Select Role</h1>
       <button onClick={() => navigate("/Admin")}>Admin</button>
-      <button>User</button>
+      <button onClick={()=>navigate("/users")}>User</button>
       <button className="logout" onClick={mutate}>Logout</button>
     </div>
   );
