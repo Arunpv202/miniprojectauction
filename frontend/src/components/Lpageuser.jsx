@@ -4,7 +4,9 @@ import socket from "../store/socketglobal.jsx";
 import { useMutation } from "@tanstack/react-query";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import { useAuthStore } from "../store/global-store.jsx";
+import { useNavigate } from "react-router-dom";
 function Successpage() {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(null);
   const [playername,setPlayername]=useState("");
   const [baseprice,setBaseprice]=useState("");
@@ -81,16 +83,21 @@ function Successpage() {
       mutate(); // Fetch the next player
       fetchRemainingPurse();
     });
+    socket.on("auctionfinished", () => {
+      socket.disconnect();
+      navigate("/Rolechoose");
+    });
     return () => {
       socket.off("playertobid");
       socket.off("newBid");
       socket.off("nextPlayer");
+      socket.off("auctionfinished");
     };
 
   }, []);
   const handleBid = () => {
     setIsBiddingDisabled(true); 
-    let newPrice = parseInt(baseprice) + parseInt(bidincrement);
+    let newPrice = teamName ? parseInt(baseprice) + parseInt(bidincrement) : parseInt(baseprice);
     if (newPrice > remainingPurse) {
       alert("You don't have enough balance to bid");
       return;

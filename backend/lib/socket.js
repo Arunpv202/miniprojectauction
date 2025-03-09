@@ -127,7 +127,25 @@ io.on("connection", (socket) => {
       console.error("Error finalizing player sale:", error);
     }
   });
+  socket.on("endAuction", async ({ auctionCode }) => {
+    try {
+      console.log(`Auction ${auctionCode} ended`);
 
+      const auction = await Auction.findOne({ where: { code: auctionCode } });
+      if (!auction) {
+        console.error("Auction not found");
+        return;
+      }
+
+      await Auction.destroy({ where: { code: auctionCode } });
+      await Team.destroy({ where: { auctionCode } });
+      await Player.destroy({ where: { auctionCode } });
+
+      io.to(auctionCode).emit("auctionfinished");  
+    } catch (error) {
+      console.error("Error ending auction:", error);
+    }
+  });
   socket.on("disconnect", async () => {
     try {
       console.log(`User disconnected: ${socket.id}`);

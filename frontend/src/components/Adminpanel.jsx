@@ -4,8 +4,10 @@ import socket from "../store/socketglobal.jsx";
 import { useAuthStore } from "../store/global-store";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import "../styles/Adminlast.css";
+import { useNavigate } from "react-router-dom";
 
 const Adminlast = () => {
+  const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
   const [playername, setPlayername] = useState("");
@@ -54,8 +56,14 @@ const Adminlast = () => {
         setIspicking(false);
       }
     });
+      socket.on("auctionfinished", () => {
+        socket.disconnect();
+      navigate("/Rolechoose");
+      });
 
     return () => {
+      socket.off("nextPlayer");
+      socket.off("auctionfinished");
       socket.off("playertobid");
       socket.off("newBid");
     }
@@ -111,6 +119,10 @@ const Adminlast = () => {
     }
   };
 
+  const endfunction = () => {
+    socket.emit("endAuction", { auctionCode });
+  };
+
   return (
     <div>
       <div className="dropdown-container3">
@@ -134,7 +146,7 @@ const Adminlast = () => {
       </div>
 
       <div className="end-button-container3">
-        <button className="end-button3">End</button>
+        <button className="end-button3" onClick={()=>endfunction()}>End</button>
       </div>
 
       <div className="boxes-wrapper3">
