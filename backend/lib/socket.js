@@ -136,10 +136,21 @@ io.on("connection", (socket) => {
         console.error("Auction not found");
         return;
       }
-
-      await Auction.destroy({ where: { code: auctionCode } });
-      await Team.destroy({ where: { auctionCode } });
-      await Player.destroy({ where: { auctionCode } });
+      await sequelize.query("DELETE FROM Auctions WHERE code = ?", {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.DELETE,
+      });
+      
+      await sequelize.query("DELETE FROM Teams WHERE auctionCode = ?", {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.DELETE,
+      });
+      
+      await sequelize.query("DELETE FROM Players WHERE auctionCode = ?", {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.DELETE,
+      });
+      
 
       io.to(auctionCode).emit("auctionfinished");  
     } catch (error) {

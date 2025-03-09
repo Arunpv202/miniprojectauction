@@ -34,7 +34,7 @@ function StartAuction() {
     return res.json();
   };
 
-  const { mutate, isLoading, isError, error } = useMutation({
+  const { mutate:fetchingplayer, isLoading, isError, error } = useMutation({
     mutationFn: fetchPlayers,
     onSuccess: (data) => {
       setPlayers(data);
@@ -49,9 +49,28 @@ function StartAuction() {
     if (showPlayers) {
       setShowPlayers(false);
     } else {
-      mutate();
+      fetchingplayer();
     }
   };
+
+  const Auctionstarted = async () => {
+    const res = await fetch(`/api/auction/startAuction/${auctionCode}`, {
+      method: "GET",
+      credentials: "include", // Include credentials
+    });
+    if (!res.ok) throw new Error("Failed to start auction");
+    return res.json();
+  };
+  const { mutate:StartingAuction} = useMutation({
+    mutationFn: Auctionstarted,
+    onSuccess: (data) => {
+      console.log("Auction started successfully:", data);
+      Navigate("/Adminpanel");
+    },
+    onError: (error) => {
+      console.error("Error starting auction:", error.message);
+    },
+  });
 
   return (
     <div className="auction-container">
@@ -91,7 +110,7 @@ function StartAuction() {
 
       {/* Start Round Button - Centered */}
       <div className="start-auction-wrapper">
-        <button className="start-auction-btn" onClick={()=>{Navigate("/Adminpanel")}}>Start Round</button>
+        <button className="start-auction-btn" onClick={()=>StartingAuction()}>Start Round</button>
       </div>
     </div>
   );

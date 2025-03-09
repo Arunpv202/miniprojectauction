@@ -1,3 +1,4 @@
+import e from "express";
 import {sequelize} from "../db/db.js";
 import Auction from "../models/Auctiontable.js";
 import Player from "../models/player.js";
@@ -26,7 +27,7 @@ export const createAuction = async (req, res) => {
 
     // Insert new auction if code is unique
     const auction = await sequelize.query(
-      "INSERT INTO Auctions (socketid,name, code, teamCount,createdAt, updatedAt) VALUES (null,?, ?, ?,NOW(), NOW())",
+      "INSERT INTO Auctions (started,socketid,name, code, teamCount,createdAt, updatedAt) VALUES (false,null,?, ?, ?,NOW(), NOW())",
       {
         replacements: [name, code, teamCount],
         type: sequelize.QueryTypes.INSERT,
@@ -133,8 +134,7 @@ export const updateTeamName = async (req, res) => {
     if (!teamName || !auctionCode) {
       return res.status(400).json({ error: "Team name and auction code are required" });
     }
-
-    // Check if the auction exists
+  
     const existingAuction = await sequelize.query(
       "SELECT id FROM Auctions WHERE code = ? LIMIT 1",
       {
@@ -171,6 +171,18 @@ export const updateTeamName = async (req, res) => {
 
     if (availableTeam.length === 0) {
       return res.status(400).json({ error: "Wait for the admin to start" });
+    }
+
+    const auctionstarted = await sequelize.query(
+      "SELECT started FROM Auctions WHERE code = ? LIMIT 1",
+      {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    console.log(auctionstarted);
+    if(auctionstarted[0].started===1){
+      return res.status(400).json({ error: "Auction already started" });
     }
 
     // Update the first available team
@@ -221,6 +233,24 @@ export const fetchRemainingPurse = async (req, res) => {
     );
     console.log(remainingPurse);
     res.status(200).json(remainingPurse[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+export const Auctionstarted = async (req, res) => {
+  try {
+    const { auctionCode } = req.params;
+    console.log(auctionCode);
+    const result = await sequelize.query(
+      "UPDATE Auctions SET started = true WHERE code = ?",
+      {
+        replacements: [auctionCode],
+        type: sequelize.QueryTypes.UPDATE,
+      }
+    );
+    console.log(result);
+    res.status(200).json({ message: "Auction started successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
