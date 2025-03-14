@@ -1,0 +1,132 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.dropdown-containerul {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  font-size: 1rem;
+  background: white; /* White background for better visibility */
+  border: 2px solid #1c2833; /* Dark grey border */
+  border-radius: 8px; /* Rounded edges */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
+}
+
+.dropdown-btnul {
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #1c2833; /* Darker blue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.dropdown-btnul:hover {
+  background-color: #34495e; /* Slightly lighter blue */
+}
+.dropdown-contentul {
+  margin-top: 5px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 5px;
+}
+.dropdown-contentul p {
+  margin: 0;
+  padding: 5px;
+  font-weight: bold;
+  color: #1c2833; /* Darker text */
+}
+
+.remaining-purse {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Container for boxes and Bid button */
+.section-containerul {
+  position: absolute;
+  top: 10px;
+  left: 400px;
+  width: 500px;
+  height: 350px;
+  margin: 200px auto 0;
+  border: 1px dashed #ccc; /* Optional: visual guide */
+}
+
+/* Timer styling */
+.timer {
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #1c2833; /* Dark Grey */
+  color: white; /* White text */
+  border: 2px solid #fff; /* White border for contrast */
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+/* Common styling for data boxes */
+.data-boxul {
+  border: 1px solid #1c2833; /* Darker border */
+  background-color: #2c3e50; /* Dark blueish-grey */
+  color: white; /* White text */
+  width: 200px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+/* Manual positioning for each box inside the container */
+#box1 {
+  top: 66px;
+  left: calc(50% - 75px); /* Centers Box 1 horizontally */
+}
+
+#box2 {
+  top: 170px;
+  left: 60px;
+}
+
+#box3 {
+  top: 170px;
+  right: 60px;
+}
+.bid-buttonul {
+  position: absolute;
+  top: 300px;
+  left: 2px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #27ae60; /* Green */
+  color: white;
+  border: none;
+  border-radius: 15px; /* Rounded edges */
+  transition: transform 0.2s ease, background-color 0.3s;
+  transform-origin: center; /* Ensures scaling happens from center */
+}
+
+/* Hover effect - Enlarges without moving */
+.bid-buttonul:hover {
+  transform: scale(1.1);
+  background-color: #219150; /* Darker green */
+}

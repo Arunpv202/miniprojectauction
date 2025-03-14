@@ -1,0 +1,111 @@
+/* Apply Dark Blueish-Black Background to the Whole Page */
+body, html {
+  background-color: #0d1b2a; /* Dark blueish-black */
+  color: white;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Welcome Admin Section */
+/* Welcome Admin Section */
+.welcome-container {
+  margin-bottom: 20px;
+}
+
+.welcome-admin {
+  font-size: 32px; /* Bigger and more noticeable */
+  font-weight: 700; /* Extra Bold */
+  color: #f8f9fa; /* Softer white */
+  font-family: "Poppins", sans-serif; /* Modern and elegant font */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.admin-description {
+  font-size: 18px; /* Slightly larger for readability */
+  font-weight: 400;
+  color: #d3d6db; /* Soft gray */
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 10px;
+  font-family: "Roboto", sans-serif; /* Clean and professional font */
+  line-height: 1.5; /* Better spacing */
+}
+
+
+/* Centered Container */
+.container {
+  max-width: 400px; /* Keeping the form small */
+  padding: 20px;
+  background-color: #1b263b; /* Slightly lighter blue */
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+/* Input Field Styling */
+form input {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #778da9; /* Soft blue */
+  border-radius: 5px;
+  background-color: #1b263b;
+  color: white;
+}
+
+/* Placeholder Text Color */
+form input::placeholder {
+  color: #aab3cf;
+}
+
+/* Submit Button */
+form button {
+  width: 120px; /* Bigger button */
+  padding: 12px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  border-radius: 25px; /* Circular edges */
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+/* Logout Button */
+.logout {
+  background-color: #c82333;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%; /* Circular logout button */
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.logout:hover {
+  background-color: #a71d2a;
+}
+
+/* Responsive Layout */
+@media (max-width: 600px) {
+  .container {
+      padding: 10px;
+  }
+}

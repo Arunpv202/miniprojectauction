@@ -1,0 +1,94 @@
+
+.join-auction-container {
+    background: rgb(3, 0, 50);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    margin: auto;
+  }
+  
+  .join-auction-container h1 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .join-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #22c55e; /* Green */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .join-button:hover {
+    background-color: #16a34a;
+  }
+  
+  .auction-info {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 1rem;
+    background: #f3f4f6;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100%;
+  }
+  .join-auction-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Centers everything on the page */
+    background: linear-gradient(to bottom, #01172d, #0f243f);
+    padding: 20px;
+  }
+  
+  /* Stylish, Animated Auction Arena Text */
+  .auction-arena-text {
+    font-size: 3rem; /* Bigger and more impactful */
+    font-weight: bold;
+    background: linear-gradient(45deg, #ffcc00, #ff6600); /* Gold-Orange Gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; /* Makes gradient apply to text */
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.8); /* Glowing effect */
+    animation: pulse 1.5s infinite ease-in-out; /* Pulse Animation */
+}
+
+
+/* Pulse Animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 20px rgba(255, 204, 0, 1);
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+    }
+}
