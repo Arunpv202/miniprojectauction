@@ -8,6 +8,7 @@ import LoadingSpinner from "./common/LoadingSpinner";
 import { toast } from "react-toastify";
 
 function StartAuction() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const Navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [players, setPlayers] = useState([]);
@@ -93,7 +94,7 @@ function StartAuction() {
 
 
   const fetchPlayers = async () => {
-    const res = await fetch(`/api/auction/fetchPlayers/${auctionCode}`, {
+    const res = await fetch(`${API_BASE_URL}/api/auction/fetchPlayers/${auctionCode}`, {
       method: "GET",
       credentials: "include", // Include credentials
     });
@@ -121,7 +122,7 @@ function StartAuction() {
   };
 
   const Auctionstarted = async () => {
-    const res = await fetch(`/api/auction/startAuction/${auctionCode}`, {
+    const res = await fetch(`${API_BASE_URL}/api/auction/startAuction/${auctionCode}`, {
       method: "GET",
       credentials: "include", // Include credentials
     });

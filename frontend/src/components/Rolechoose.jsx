@@ -10,6 +10,7 @@ import { UserRound } from 'lucide-react';
 
 
 function RoleSelection() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ function RoleSelection() {
   const { mutate } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch("/api/auth/logout", {
+        const res = await fetch(API_BASE_URL+"/api/auth/logout", {
           method: "POST",
           credentials: "include",
         });

@@ -8,6 +8,7 @@ import "../styles/Adminlast.css";
 import { useNavigate } from "react-router-dom";
 
 const Adminlast = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
@@ -71,7 +72,7 @@ const Adminlast = () => {
   }, []);
 
   const fetchPlayers = async () => {
-    const res = await fetch(`/api/auction/fetchPlayers/${auctionCode}`, {
+    const res = await fetch(`${API_BASE_URL}/api/auction/fetchPlayers/${auctionCode}`, {
       method: "GET",
       credentials: "include",
     });

@@ -7,6 +7,7 @@ import { UserRoundPlus } from 'lucide-react';
 import { ShieldCheck } from 'lucide-react';
 
 function AuctionDetails() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const navigate = useNavigate();
   let auctionCode = useAuthStore((state) => state.auctionCode);
 
@@ -19,7 +20,7 @@ function AuctionDetails() {
   // Mutation for adding a player
   const { mutate: addPlayer } = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/auction/Players", {
+      const res = await fetch(API_BASE_URL+"/api/auction/Players", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -37,7 +38,7 @@ function AuctionDetails() {
   // Mutation for submitting the auction (creating teams)
   const { mutate: submitAuction } = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/auction/Teams", {
+      const res = await fetch(API_BASE_URL+"/api/auction/Teams", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

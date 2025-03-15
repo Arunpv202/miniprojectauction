@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/global-store.jsx";
 function Signup() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const [formData, setFormData] = useState({
     fullname: "",
     username: "",
@@ -17,7 +18,7 @@ function Signup() {
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ email, username, fullname, password }) => {
       try {
-        const res = await fetch("/api/auth/signup", {
+        const res = await fetch(API_BASE_URL+"/api/auth/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

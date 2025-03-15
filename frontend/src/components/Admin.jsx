@@ -8,6 +8,7 @@ import { User } from 'lucide-react';
 import { Send } from 'lucide-react';
 
 function Admin() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const [formData, setFormData] = useState({
     name: "",
     code: "",
@@ -24,7 +25,7 @@ function Admin() {
   const { mutate: createAuctionMutate } = useMutation({
     mutationFn: async ({ name, code, teamCount }) => {
       try {
-        const res = await fetch("/api/auction/Auctiondetails", {
+        const res = await fetch(API_BASE_URL+"/api/auction/Auctiondetails", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import { useAuthStore } from "../store/global-store.jsx";
 import "../styles.css"; // Import the CSS file
 
 function Login() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -17,7 +18,7 @@ function Login() {
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ username, password }) => {
       try {
-        const res = await fetch("/api/auth/login", {
+        const res = await fetch(API_BASE_URL+"/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/common/LoadingSpinner";
 import { useAuthStore } from "../store/global-store.jsx";
 import { useNavigate } from "react-router-dom";
 function Successpage() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(null);
   const [playername,setPlayername]=useState("");
@@ -115,7 +116,7 @@ function Successpage() {
   };
 
   const fetchsquad = async () => {
-    const res = await fetch(`/api/auction/fetchsquad/${team}/${auctionCode}`, {
+    const res = await fetch(`${API_BASE_URL}/api/auction/fetchsquad/${team}/${auctionCode}`, {
       method: "GET",
       credentials: "include",
     });
@@ -134,7 +135,7 @@ function Successpage() {
   });
 
   const fetchRemainingPurse = async () => {
-    const res = await fetch(`/api/auction/remainingpurse/${team}/${auctionCode}`, {
+    const res = await fetch(`${API_BASE_URL}/api/auction/remainingpurse/${team}/${auctionCode}`, {
       method: "GET",
       credentials: "include",
     });

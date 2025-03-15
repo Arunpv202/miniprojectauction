@@ -16,10 +16,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuthStore } from "./store/global-store.jsx"; // Assuming this is the correct import path
 
 function App() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8045";
+  console.log(API_BASE_URL)
   const { data: authUser, isLoading, refetch } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("/api/auth/me", {
+      const res = await fetch(API_BASE_URL+"/api/auth/me", {
         method: "GET",
         credentials: "include",
       });
