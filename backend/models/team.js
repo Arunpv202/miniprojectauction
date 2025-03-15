@@ -27,7 +27,7 @@ const Team = sequelize.define("Team", {
 },{
     timestamps: true,
 });
-Team.sync({ force: true }) // Set `force: true` to drop and recreate the table (use with caution)
+Team.sync({ force: false }) // Set `force: true` to drop and recreate the table (use with caution)
   .then(() => {
     console.log("Auction table created or already exists.");
   })

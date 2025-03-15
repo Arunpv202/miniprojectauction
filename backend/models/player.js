@@ -22,7 +22,7 @@ const Player = sequelize.define("Player", {
 },{
 	timestamps: true,
 });
-Player.sync({ force: true }) // Set `force: true` to drop and recreate the table (use with caution)
+Player.sync({ force: false }) // Set `force: true` to drop and recreate the table (use with caution)
   .then(() => {
     console.log("player table created or already exists.");
   })
