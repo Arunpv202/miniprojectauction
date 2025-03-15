@@ -3,12 +3,10 @@ import { useAuthStore } from "../store/global-store.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/Admin2.css";
-import { User } from 'lucide-react';
 import { UserRoundPlus } from 'lucide-react';
 import { ShieldCheck } from 'lucide-react';
 
 function AuctionDetails() {
-  const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
   let auctionCode = useAuthStore((state) => state.auctionCode);
 
@@ -64,22 +62,6 @@ function AuctionDetails() {
   });
 
   // Mutation for logout
-  const { mutate: logoutMutate } = useMutation({
-    mutationFn: async () => {
-      const res = await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to log out");
-
-      return res.json();
-    },
-    onSuccess: () => {
-      logout();
-      navigate("/login");
-    },
-  });
-
   return (
     <div className="container">
       {/* Header Section */}
@@ -117,8 +99,6 @@ function AuctionDetails() {
         onChange={(e) => setBidIncrement(e.target.value)}
       />
       <button onClick={submitAuction}><ShieldCheck/>Submit Auction</button>
-
-      <button className="logout-btn" onClick={logoutMutate}><User/></button>
       {errormessage && <p>{errormessage}</p>}
     </div>
   );

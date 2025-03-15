@@ -40,6 +40,23 @@ export const signup = async (req, res) => {
 		if (existingUser) {
 			return res.status(400).json({ error: "Username already taken" });
 		}
+		let existingEmail;
+		try {
+		  [existingEmail] = await User.sequelize.query(
+			"SELECT * FROM Users WHERE email = ? LIMIT 1",
+			{
+			  replacements: [email],
+			  type: Sequelize.QueryTypes.SELECT,
+			}
+		  );
+		} catch (error) {
+		  console.error("Database query error:", error);
+		  return res.status(500).json({ error: "Internal Server Error" });
+		}
+	
+		if (existingEmail) {
+		  return res.status(400).json({ error: "Email already taken" });
+		}
 
 		// Validate password length
 		if (password.length < 6) {

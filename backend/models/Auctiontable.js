@@ -40,7 +40,7 @@ const Auction = sequelize.define("Auction", {
 },{
   timestamp: true,
 });
-Auction.sync({ force:false}) // Set `force: true` to drop and recreate the table (use with caution)
+Auction.sync({ force:true}) // Set `force: true` to drop and recreate the table (use with caution)
   .then(() => {
     console.log("Auction table created or already exists.");
   })

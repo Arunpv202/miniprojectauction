@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use("/api/auth", authroutes);
 app.use("/api/auction", Auctiondetails);
 
-const PORT = process.env.PORT || 8200;
+const PORT = process.env.PORT || 8045;
 
 server.listen(PORT,()=>{
     console.log(`server running on port  ${PORT}`)
