@@ -10,7 +10,12 @@ dotenv.config();
 console.log(process.env.PORT)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
-app.use(cors());
+app.use(
+    cors({
+      origin: "https://fearless-light-production.up.railway.app", // Allow only your frontend
+      credentials: true, // Allow cookies/auth headers
+    })
+  );
 app.use(cookieParser());
 app.use("/api/auth", authroutes);
 app.use("/api/auction", Auctiondetails);

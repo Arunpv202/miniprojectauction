@@ -12,7 +12,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin:"*",
+    origin: "https://fearless-light-production.up.railway.app", // Allow only your frontend
     methods: ["GET", "POST"],
     credentials: true,
   },
