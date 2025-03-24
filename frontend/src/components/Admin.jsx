@@ -109,7 +109,7 @@ function Admin() {
           <input
             type="text"
             name="code"
-            placeholder="Enter Auction Code (Min 1 character)"
+            placeholder="Enter Auction Code (Exactly 6 character)"
             value={formData.code}
             onChange={handleInputChange}
             required

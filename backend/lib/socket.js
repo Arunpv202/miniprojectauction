@@ -48,6 +48,14 @@ io.on("connection", (socket) => {
       socket.emit("auctionerror", { message: "Auction not found" });
       return;
     }
+    if(existingauction.name!==AuctionName){
+      socket.emit("auctionerror", { message: "Auction not found" });
+      return;
+    }
+    if(teamName=="admin"){
+      socket.emit("auctionerror", { message: "The team name cannot be admin choose some other name" });
+      return;
+    }
     const availableTeam = await sequelize.query(
       "SELECT teamName FROM Teams WHERE auctionCode = ? AND teamName IS NULL LIMIT 1",
       {

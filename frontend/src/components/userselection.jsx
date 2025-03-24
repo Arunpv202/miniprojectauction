@@ -57,7 +57,7 @@ function JoinAuction() {
       <h1>Join Auction</h1>
       <input
         type="text"
-        placeholder="Team Name"
+        placeholder="Team Name(cannot be admin)"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
         className="input-field"
