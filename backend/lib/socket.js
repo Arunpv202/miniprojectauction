@@ -198,7 +198,7 @@ io.on("connection", (socket) => {
             }
             
             // Reset timeLeft for this auction
-            auctionTimers[auctionCode].timeLeft = 15;
+            auctionTimers[auctionCode].timeLeft = 30;
             auctionTimers[auctionCode].interval = setInterval(() => {
               auctionTimers[auctionCode].timeLeft -= 1;
               io.to(auctionCode).emit("timerUpdate", { timeLeft: auctionTimers[auctionCode].timeLeft });
@@ -253,7 +253,7 @@ io.on("connection", (socket) => {
             }
         
             // Reset timeLeft for this auction
-            auctionTimers[auctionCode].timeLeft = 15;
+            auctionTimers[auctionCode].timeLeft = 30;
             auctionTimers[auctionCode].interval = setInterval(() => {
               auctionTimers[auctionCode].timeLeft -= 1;
               io.to(auctionCode).emit("timerUpdate", { timeLeft: auctionTimers[auctionCode].timeLeft });
@@ -301,7 +301,7 @@ io.on("connection", (socket) => {
       if (auctionTimers[auctionCode]) {
         clearTimeout(auctionTimers[auctionCode].timer);
         clearInterval(auctionTimers[auctionCode].interval);
-        auctionTimers[auctionCode].timeLeft = 15; // Reset timeLeft for the next player
+        auctionTimers[auctionCode].timeLeft = 30; // Reset timeLeft for the next player
       }
 
       io.to(auctionCode).emit("nextPlayer", { playerno, baseprice, playername, teamName });
