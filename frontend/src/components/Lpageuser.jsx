@@ -53,6 +53,10 @@ function Successpage() {
     socket.on("disableBidButton", () => {
       setIsBiddingDisabled(true); // Disable the button when another user bids
     });
+    socket.on("bidRejected", ({message}) => {
+      console.log(message);
+      setIsBiddingDisabled(false); // Re-enable button when bid is rejected
+    });
 
     socket.on("nextPlayer", ({ playerno,baseprice,playername,teamName}) => {
       if(teamName==="") {

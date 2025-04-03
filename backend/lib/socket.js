@@ -22,6 +22,7 @@ const io = new Server(server, {
 });
 const auctionTeams = {};
 const auctionTimers = {}; 
+const auctionLocks = {};
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
@@ -216,19 +217,29 @@ io.on("connection", (socket) => {
 
   socket.on("placeBid", async ({ newPrice ,teamName,auctionCode}) => {
     try {
+      if (auctionLocks[auctionCode]) {
+        socket.emit("bidRejected", { message: "Another bid is being processed. Please wait." });
+        return;
+      }
+  
+      // Lock the auction
+      auctionLocks[auctionCode] = true;
       console.log(`New bid: ${newPrice} by ${teamName}`);
       const crntteam = await Team.findOne({ where: {auctionCode, teamName } });
 
       if (!crntteam) {
         console.error("Team not found"); 
+        delete auctionLocks[auctionCode];
         return;
       }
       if (parseInt(newPrice) > crntteam.remainingPurse) {
         console.error("Insufficient funds");
+        delete auctionLocks[auctionCode]; 
         return;
       }
 
       socket.to(auctionCode).emit("newBid", { newPrice, teamName });
+      delete auctionLocks[auctionCode];
        if (!auctionTimers[auctionCode]) {
               auctionTimers[auctionCode] = { timer: null, interval: null, timeLeft: 15 };
             }
@@ -254,8 +265,13 @@ io.on("connection", (socket) => {
                 console.log(`Timer expired for auction ${auctionCode}`);
               }
             }, 1000);
+            delete auctionLocks[auctionCode];
     } catch (error) {
       console.error("Error placing bid:", error);
+    }
+    finally {
+      // Unlock the auction
+      delete auctionLocks[auctionCode];
     }
   });
 
