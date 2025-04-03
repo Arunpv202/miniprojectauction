@@ -14,7 +14,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000", 
-      "https://fearless-light-production.up.railway.app"
+      "https://ideal-essence-production.up.railway.app","*"
     ], // Allow only your frontend
     methods: ["GET", "POST"],
     credentials: true,
