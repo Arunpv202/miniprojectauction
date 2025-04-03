@@ -22,22 +22,7 @@ function Successpage() {
   const team=useAuthStore((state)=>state.Teamname)
   const auctionCode=useAuthStore((state)=>state.auctionCode)
   console.log(team);
-  let timerId = null;
-  useEffect(() => {
-    if (timeLeft === null) return; // Timer should not run when null
-
-    if (timeLeft > 0) {
-      timerId = setInterval(() => {
-        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-    } else if (timeLeft === 0) {
-      setIsBiddingDisabled(true);
-      socket.emit("playersold", { playerno, baseprice, playername, teamName,auctionCode });
-      setTimeLeft(null);
-    }
-
-    return () => clearInterval(timerId);
-  }, [timeLeft]);
+  
   useEffect(() => {
     if (!team || !auctionCode) return;
     fetchRemainingPurse();
@@ -55,14 +40,18 @@ function Successpage() {
       console.log(playerno);
       setIsBiddingDisabled(false);
       setTeamName("");
-      setTimeLeft(15);
     });
     socket.on("newBid", ({ newPrice,teamName }) => {
       console.log(`New bid: ${newPrice} by ${teamName}`);
       setBaseprice(newPrice);
       setTeamName(teamName);
       setIsBiddingDisabled(false); // Re-enable button when another user bids
-      setTimeLeft(15);
+    });
+    socket.on("timerUpdate",({ timeLeft }) => {
+      setTimeLeft(timeLeft);
+    });
+    socket.on("disableBidButton", () => {
+      setIsBiddingDisabled(true); // Disable the button when another user bids
     });
 
     socket.on("nextPlayer", ({ playerno,baseprice,playername,teamName}) => {
@@ -80,7 +69,6 @@ function Successpage() {
         setPlayerno("");
         setTeamName(teamName);
       }
-      setTimeLeft(null); // Stop the timer
       setIsBiddingDisabled(true); // Disable the button
       mutate(); // Fetch the next player
       fetchRemainingPurse();
@@ -94,6 +82,8 @@ function Successpage() {
       socket.off("newBid");
       socket.off("nextPlayer");
       socket.off("auctionfinished");
+      socket.off("timerUpdate");
+      socket.off("disableBidButton");
     };
 
   }, []);
@@ -111,7 +101,6 @@ function Successpage() {
     setBaseprice(newPrice);
     setTeamName(team);
     socket.emit("placeBid", { newPrice, teamName: team,auctionCode });
-    setTimeLeft(15);
     }
   };
 

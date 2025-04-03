@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import socket from "../store/socketglobal.jsx";
 import { useAuthStore } from "../store/global-store";
@@ -21,6 +21,16 @@ const Adminlast = () => {
   const [playersRemoved, setPlayersRemoved] = useState(false);
   const [ispicking, setIspicking] = useState(false);
   const auctionCode = useAuthStore((state) => state.auctionCode);
+  const playernoRef = useRef("");
+  const basepriceRef = useRef("");
+  const playernameRef = useRef("");
+  const cteamNameRef = useRef("");
+  useEffect(() => {
+    playernoRef.current = playerno;
+    basepriceRef.current = baseprice;
+    playernameRef.current = playername;
+    cteamNameRef.current = cteamName;
+  }, [playerno, baseprice, playername, cteamName]);
 
   useEffect(() => {
     socket.on("playertobid", ({ playerId, name, basePrice, bidincrement }) => {
@@ -62,12 +72,29 @@ const Adminlast = () => {
         socket.disconnect();
       navigate("/Rolechoose");
       });
+      socket.on("timerExpired", ({auctionCode}) => {
+        console.log("Timer expired, emitting playersold with:", {
+          playerno: playernoRef.current,
+          baseprice: basepriceRef.current,
+          playername: playernameRef.current,
+          teamName: cteamNameRef.current,
+          auctionCode,
+        });
+        socket.emit("playersold", {
+          playerno: playernoRef.current,
+          baseprice: basepriceRef.current,
+          playername: playernameRef.current,
+          teamName: cteamNameRef.current,
+          auctionCode,
+        });
+      });
 
     return () => {
       socket.off("nextPlayer");
       socket.off("auctionfinished");
       socket.off("playertobid");
       socket.off("newBid");
+      socket.off("timerExpired");
     }
   }, []);
 

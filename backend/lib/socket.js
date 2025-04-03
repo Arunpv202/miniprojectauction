@@ -12,12 +12,16 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://fearless-light-production.up.railway.app", // Allow only your frontend
+    origin: [
+      "http://localhost:3000", 
+      "https://fearless-light-production.up.railway.app"
+    ], // Allow only your frontend
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 const auctionTeams = {};
+const auctionTimers = {}; 
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
@@ -180,6 +184,31 @@ io.on("connection", (socket) => {
       }
 
       io.to(auctionCode).emit("playertobid", { playerId, name, basePrice, bidincrement: auction.bidincrement });
+       if (!auctionTimers[auctionCode]) {
+              auctionTimers[auctionCode] = { timer: null, interval: null, timeLeft: 15 }; // Add timeLeft to the auctionTimers object
+            }
+            
+            // Clear any existing timer and interval
+            if (auctionTimers[auctionCode].timer) {
+              clearTimeout(auctionTimers[auctionCode].timer);
+            }
+            if (auctionTimers[auctionCode].interval) {
+              clearInterval(auctionTimers[auctionCode].interval);
+            }
+            
+            // Reset timeLeft for this auction
+            auctionTimers[auctionCode].timeLeft = 15;
+            auctionTimers[auctionCode].interval = setInterval(() => {
+              auctionTimers[auctionCode].timeLeft -= 1;
+              io.to(auctionCode).emit("timerUpdate", { timeLeft: auctionTimers[auctionCode].timeLeft });
+            
+              if (auctionTimers[auctionCode].timeLeft <= 0) {
+                clearInterval(auctionTimers[auctionCode].interval); // Stop broadcasting time
+                io.to(auctionCode).emit("disableBidButton"); // Notify users to disable the bid button
+                io.to(auctionTeams[auctionCode]["admin"]).emit("timerExpired", { auctionCode }); // Notify admin
+                console.log(`Timer expired for auction ${auctionCode}`);
+              }
+            }, 1000);
     } catch (error) {
       console.error("Error picking player:", error);
     }
@@ -200,6 +229,31 @@ io.on("connection", (socket) => {
       }
 
       socket.to(auctionCode).emit("newBid", { newPrice, teamName });
+       if (!auctionTimers[auctionCode]) {
+              auctionTimers[auctionCode] = { timer: null, interval: null, timeLeft: 15 };
+            }
+        
+            // Clear any existing timer and interval
+            if (auctionTimers[auctionCode].timer) {
+              clearTimeout(auctionTimers[auctionCode].timer);
+            }
+            if (auctionTimers[auctionCode].interval) {
+              clearInterval(auctionTimers[auctionCode].interval);
+            }
+        
+            // Reset timeLeft for this auction
+            auctionTimers[auctionCode].timeLeft = 15;
+            auctionTimers[auctionCode].interval = setInterval(() => {
+              auctionTimers[auctionCode].timeLeft -= 1;
+              io.to(auctionCode).emit("timerUpdate", { timeLeft: auctionTimers[auctionCode].timeLeft });
+            
+              if (auctionTimers[auctionCode].timeLeft <= 0) {
+                clearInterval(auctionTimers[auctionCode].interval); // Stop broadcasting time
+                io.to(auctionCode).emit("disableBidButton"); // Notify users to disable the bid button
+                io.to(auctionTeams[auctionCode]["admin"]).emit("timerExpired", { auctionCode }); // Notify admin
+                console.log(`Timer expired for auction ${auctionCode}`);
+              }
+            }, 1000);
     } catch (error) {
       console.error("Error placing bid:", error);
     }
@@ -227,6 +281,11 @@ io.on("connection", (socket) => {
 
         await Player.update({ teamPurchased: teamName }, { where: { id: playerno } });
         await Team.update({ remainingPurse: changeprice }, { where: { auctionCode:auctionCode, teamName } });
+      }
+      if (auctionTimers[auctionCode]) {
+        clearTimeout(auctionTimers[auctionCode].timer);
+        clearInterval(auctionTimers[auctionCode].interval);
+        auctionTimers[auctionCode].timeLeft = 15; // Reset timeLeft for the next player
       }
 
       io.to(auctionCode).emit("nextPlayer", { playerno, baseprice, playername, teamName });
@@ -257,9 +316,16 @@ io.on("connection", (socket) => {
         replacements: [auctionCode],
         type: sequelize.QueryTypes.DELETE,
       });
+      if (auctionTimers[auctionCode]) {
+        clearTimeout(auctionTimers[auctionCode].timer);
+        clearInterval(auctionTimers[auctionCode].interval);
+        delete auctionTimers[auctionCode]; // Remove the entry from auctionTimers
+      }
       
 
       io.to(auctionCode).emit("auctionfinished");  
+      delete auctionTeams[auctionCode];
+    console.log(`Cleaned up auctionTimers and auctionTeams for auction ${auctionCode}`);
     } catch (error) {
       console.error("Error ending auction:", error);
     }

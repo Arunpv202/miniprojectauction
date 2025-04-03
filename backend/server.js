@@ -12,7 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(
     cors({
-      origin: "https://fearless-light-production.up.railway.app", // Allow only your frontend
+      origin: ["http://localhost:3000", "https://fearless-light-production.up.railway.app"],
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow only your frontend
       credentials: true, // Allow cookies/auth headers
     })
   );
